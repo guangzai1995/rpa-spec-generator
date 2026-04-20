@@ -1,0 +1,54 @@
+# OS and editor
+.DS_Store
+.idea/
+.vscode/
+
+# Logs and pid files
+*.log
+*.pid
+logs/
+.backend.pid
+.frontend.pid
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+.tox/
+.nox/
+.venv/
+venv/
+env/
+backend/.venv/
+
+# Node
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build artifacts
+build/
+tmp/
+temp/
+
+# Runtime data and generated outputs
+backend/models/
+backend/uploads/
+backend/note_results/
+backend/static/docs/
+backend/static/screenshots/
+
+# Local env files
+.env
+.env.*
+!.env.example
