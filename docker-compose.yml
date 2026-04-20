@@ -16,7 +16,8 @@ services:
       - DATABASE_URL=sqlite:///rpa_spec.db
       - BACKEND_PORT=8480
       - WHISPER_MODEL_SIZE=${WHISPER_MODEL_SIZE:-large-v3}
-      - WHISPER_DEVICE=${WHISPER_DEVICE:-cpu}
+      - WHISPER_DEVICE=${WHISPER_DEVICE:-cuda}
+    gpus: all
     deploy:
       resources:
         limits:

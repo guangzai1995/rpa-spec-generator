@@ -2,22 +2,15 @@ import os
 from contextlib import asynccontextmanager
 
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.staticfiles import StaticFiles
-from dotenv import load_dotenv
 
-# 设置 CUDA 库搜索路径（ctranslate2/faster-whisper 需要 libcublas/libcudnn）
-_cuda_lib_dirs = [
-    "/usr/local/cuda/targets/x86_64-linux/lib",
-    "/usr/local/lib/python3.10/dist-packages/nvidia/cublas/lib",
-    "/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib",
-]
-_extra = ":".join(d for d in _cuda_lib_dirs if os.path.isdir(d))
-if _extra:
-    _cur = os.environ.get("LD_LIBRARY_PATH", "")
-    os.environ["LD_LIBRARY_PATH"] = f"{_extra}:{_cur}" if _cur else _extra
+from app.utils.cuda import configure_cuda_library_path
+
+configure_cuda_library_path()
 
 from app.db.init_db import init_db
 from app.utils.logger import get_logger
@@ -57,5 +50,6 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 if __name__ == "__main__":
     port = int(os.getenv("BACKEND_PORT", 8480))
     host = os.getenv("BACKEND_HOST", "0.0.0.0")
+    reload = os.getenv("UVICORN_RELOAD", "false").lower() == "true"
     logger.info(f"启动服务: {host}:{port}")
-    uvicorn.run("main:app", host=host, port=port, reload=True)
+    uvicorn.run("main:app", host=host, port=port, reload=reload)

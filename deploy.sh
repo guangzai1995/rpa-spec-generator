@@ -37,13 +37,6 @@ FRONTEND_PORT="${FRONTEND_PORT:-3000}"
 BACKEND_PID_FILE="$SCRIPT_DIR/.backend.pid"
 FRONTEND_PID_FILE="$SCRIPT_DIR/.frontend.pid"
 
-# CUDA 库路径 (.so 权限 & 搜索路径)
-CUDA_LIB_DIRS=(
-  "/usr/local/cuda/targets/x86_64-linux/lib"
-  "/usr/local/lib/python3.10/dist-packages/nvidia/cublas/lib"
-  "/usr/local/lib/python3.10/dist-packages/nvidia/cudnn/lib"
-)
-
 # ---------- 工具函数 ----------
 stop_process() {
   local pid_file="$1" name="$2"
@@ -77,7 +70,20 @@ health_check() {
 
 setup_ld_library_path() {
   local extra=""
-  for d in "${CUDA_LIB_DIRS[@]}"; do
+  local cuda_lib_dirs=("/usr/local/cuda/targets/x86_64-linux/lib")
+  if command -v python >/dev/null 2>&1; then
+    while IFS= read -r site_dir; do
+      [[ -z "$site_dir" ]] && continue
+      cuda_lib_dirs+=("$site_dir/nvidia/cublas/lib" "$site_dir/nvidia/cudnn/lib")
+    done < <(python - <<'PY'
+import site
+for item in site.getsitepackages():
+    print(item)
+PY
+)
+  fi
+
+  for d in "${cuda_lib_dirs[@]}"; do
     if [[ -d "$d" ]]; then
       # 确保 .so 文件可读可执行
       find "$d" -name "*.so*" -exec chmod a+rx {} \; 2>/dev/null || true
@@ -111,7 +117,8 @@ start_backend() {
   else
     info "安装 Python 依赖 ..."
     pip install -q --timeout 30 -i https://pypi.tuna.tsinghua.edu.cn/simple \
-      -r "$BACKEND_DIR/requirements.txt" || {
+      -r "$BACKEND_DIR/requirements.txt" \
+      "nvidia-cublas-cu12>=12,<13" "nvidia-cudnn-cu12>=9,<10" || {
       warn "依赖安装失败，尝试继续..."
     }
   fi

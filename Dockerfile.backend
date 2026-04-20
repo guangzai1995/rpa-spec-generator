@@ -1,33 +1,32 @@
 FROM python:3.11-slim
 
-# 安装系统依赖
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    NVIDIA_PYTHON_SITE=/usr/local/lib/python3.11/site-packages
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ffmpeg \
     curl \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# 安装 Python 依赖
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY backend/requirements.txt /tmp/requirements.txt
+RUN pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    pip install "nvidia-cublas-cu12>=12,<13" "nvidia-cudnn-cu12>=9,<10"
 
-# 复制后端代码
-COPY backend/ .
+COPY backend/ ./
 
-# 创建必要目录
-RUN mkdir -p static/screenshots static/docs uploads note_results templates
-
-# CUDA / cuDNN .so 搜索路径
-ENV LD_LIBRARY_PATH="/usr/local/cuda/targets/x86_64-linux/lib:/usr/local/lib/python3.11/dist-packages/nvidia/cublas/lib:/usr/local/lib/python3.11/dist-packages/nvidia/cudnn/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-
-# 确保 .so 文件权限
-RUN find /usr/local/lib/python3.11/dist-packages/nvidia -name "*.so*" -exec chmod a+rx {} \; 2>/dev/null || true && \
+RUN mkdir -p static/screenshots static/docs uploads note_results templates && \
+    find "$NVIDIA_PYTHON_SITE/nvidia" -name "*.so*" -exec chmod a+rx {} \; 2>/dev/null || true && \
     ldconfig 2>/dev/null || true
+
+ENV LD_LIBRARY_PATH="/usr/local/cuda/targets/x86_64-linux/lib:${NVIDIA_PYTHON_SITE}/nvidia/cublas/lib:${NVIDIA_PYTHON_SITE}/nvidia/cudnn/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
 EXPOSE 8480
 
-# 健康检查
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
     CMD curl -f http://localhost:8480/api/health || exit 1
 

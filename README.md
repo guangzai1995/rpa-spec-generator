@@ -50,6 +50,25 @@ docker build -t rpa-spec-generator .
 docker run -p 80:80 -p 8480:8480 rpa-spec-generator
 ```
 
+### Docker GPU 部署
+
+```bash
+# 需要宿主机已安装 NVIDIA Container Toolkit
+docker compose up -d --build
+
+# 或直接运行单镜像
+docker build -t rpa-spec-generator .
+docker run --gpus all -p 80:80 -p 8480:8480 \
+	-e WHISPER_DEVICE=cuda \
+	rpa-spec-generator
+```
+
+说明：
+
+- Docker 镜像会额外安装 faster-whisper 所需的 CUDA 12 cuBLAS 与 cuDNN 9 Python 运行库。
+- 如果容器启动时没有可用 GPU，后端会自动回退到 CPU 模式，而不是直接崩溃。
+- 模型目录、上传文件、转写结果不会被打进构建上下文；请在运行时通过挂载卷或容器内下载模型。
+
 ## 使用流程
 
 1. 打开浏览器访问 http://localhost:3000（开发）或 http://localhost（Docker）

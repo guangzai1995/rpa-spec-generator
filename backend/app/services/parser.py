@@ -10,6 +10,7 @@ from dataclasses import dataclass, asdict, field
 import ffmpeg
 from PIL import Image
 
+from app.utils.cuda import resolve_whisper_device
 from app.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -165,8 +166,12 @@ def transcribe_video(
         logger.error("faster-whisper 未安装，请运行: pip install faster-whisper")
         raise
 
-    compute_type = "float16" if device == "cuda" else "int8"
-    model = WhisperModel(model_path, device=device, compute_type=compute_type)
+    resolved_device = resolve_whisper_device(device)
+    if resolved_device != device:
+        logger.warning(f"请求的 Whisper 设备为 {device}，当前环境不可用，已回退到 {resolved_device}")
+
+    compute_type = "float16" if resolved_device == "cuda" else "int8"
+    model = WhisperModel(model_path, device=resolved_device, compute_type=compute_type)
 
     # 构建 initial_prompt（注入业务术语）
     initial_prompt = None
