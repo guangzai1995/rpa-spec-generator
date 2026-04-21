@@ -13,6 +13,7 @@ openai==1.70.0
 
 # ASR
 faster-whisper==1.1.1
+modelscope==1.24.0
 
 # Video processing
 ffmpeg-python==0.2.0
