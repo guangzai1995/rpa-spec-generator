@@ -81,6 +81,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     ffmpeg \
+    fonts-wqy-zenhei \
     nginx \
     libgomp1 \
     python3 \
