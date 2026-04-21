@@ -9,7 +9,11 @@ backend/.env
 backend/.venv/
 backend/__pycache__/
 backend/**/__pycache__/
-backend/models/
+backend/models/*
+!backend/models/pengzhendong/
+!backend/models/pengzhendong/**
+backend/models/**/._____temp/
+backend/models/**/.lock/
 backend/uploads/
 backend/note_results/
 backend/static/docs/

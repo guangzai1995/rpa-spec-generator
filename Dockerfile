@@ -8,13 +8,13 @@
 # 运行 (GPU):
 #   docker run --rm --gpus all -p 80:80 -p 8480:8480 \
 #     --env-file backend/.env \
-#     rpa-spec:latest /docker-entrypoint.sh
+#     rpa-spec:latest
 #
 # 运行 (CPU):
 #   docker run --rm -p 80:80 -p 8480:8480 \
 #     --env-file backend/.env \
 #     -e WHISPER_DEVICE=cpu \
-#     rpa-spec:latest /docker-entrypoint.sh
+#     rpa-spec:latest
 # ================================================================
 
 # ----------------------------------------------------------------
@@ -103,7 +103,10 @@ ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
 # ---------- 应用代码 ----------
 WORKDIR /app
 
-COPY backend/ ./backend/
+COPY backend/main.py ./backend/main.py
+COPY backend/app/ ./backend/app/
+COPY backend/scripts/ ./backend/scripts/
+COPY backend/models/pengzhendong/ ./backend/models/pengzhendong/
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
@@ -123,4 +126,4 @@ WORKDIR /app/backend
 
 EXPOSE 80 8480
 
-# 不设置 CMD — 仅作环境镜像，运行时由调用方传入命令
+CMD ["/docker-entrypoint.sh"]
