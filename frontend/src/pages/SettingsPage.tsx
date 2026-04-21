@@ -180,7 +180,7 @@ export default function SettingsPage() {
           当前引擎：Faster-Whisper（通过环境变量配置）
         </div>
         <div className="settings-info">
-          <p>• 模型大小：<code>WHISPER_MODEL_SIZE</code>（默认 large-v3）</p>
+          <p>• 模型大小：<code>WHISPER_MODEL_SIZE</code>（默认 large-v3-turbo）</p>
           <p>• 运行设备：<code>WHISPER_DEVICE</code>（cpu / cuda）</p>
           <p>• 首次运行会自动下载模型文件，请确保网络通畅</p>
         </div>

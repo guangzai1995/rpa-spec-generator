@@ -1,0 +1,312 @@
+[
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "image_size": "original",
+    "strategy": "A_极简",
+    "coords": null,
+    "elapsed": 10.66775894165039,
+    "content_len": 422,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "image_size": "original",
+    "strategy": "B_JSON格式",
+    "coords": null,
+    "elapsed": 2.0991029739379883,
+    "content_len": 195,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "image_size": "original",
+    "strategy": "C_英文prompt",
+    "coords": null,
+    "elapsed": 1.709310531616211,
+    "content_len": 476,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "image_size": "original",
+    "strategy": "D_分步思考",
+    "coords": [
+      160,
+      350,
+      240,
+      390
+    ],
+    "elapsed": 4.69117283821106,
+    "content_len": 821,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "image_size": "original",
+    "strategy": "E_grounding",
+    "coords": null,
+    "elapsed": 2.3938634395599365,
+    "content_len": 950,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "image_size": "original",
+    "strategy": "F_千分比坐标",
+    "coords": null,
+    "elapsed": 1.771254539489746,
+    "content_len": 223,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "image_size": "original",
+    "strategy": "G_Qwen_VL_bbox",
+    "coords": [
+      225,
+      364,
+      234,
+      382
+    ],
+    "elapsed": 2.4420578479766846,
+    "content_len": 20,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "A_极简",
+    "coords": null,
+    "elapsed": 2.533301591873169,
+    "content_len": 407,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "B_JSON格式",
+    "coords": null,
+    "elapsed": 1.9555375576019287,
+    "content_len": 220,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "C_英文prompt",
+    "coords": null,
+    "elapsed": 2.4534213542938232,
+    "content_len": 481,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "D_分步思考",
+    "coords": null,
+    "elapsed": 4.117335557937622,
+    "content_len": 860,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "E_grounding",
+    "coords": null,
+    "elapsed": 2.859579086303711,
+    "content_len": 451,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "F_千分比坐标",
+    "coords": null,
+    "elapsed": 1.7818565368652344,
+    "content_len": 221,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "G_Qwen_VL_bbox",
+    "coords": [
+      161,
+      396,
+      247,
+      426
+    ],
+    "elapsed": 2.39611554145813,
+    "content_len": 17,
+    "success": true
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "image_size": "original",
+    "strategy": "A_极简",
+    "coords": [
+      528,
+      656,
+      567,
+      683
+    ],
+    "elapsed": 2.091738700866699,
+    "content_len": 17,
+    "success": true
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "image_size": "original",
+    "strategy": "B_JSON格式",
+    "coords": null,
+    "elapsed": 1.7094225883483887,
+    "content_len": 221,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "image_size": "original",
+    "strategy": "C_英文prompt",
+    "coords": null,
+    "elapsed": 2.209890842437744,
+    "content_len": 498,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "image_size": "original",
+    "strategy": "D_分步思考",
+    "coords": null,
+    "elapsed": 4.152618885040283,
+    "content_len": 857,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "image_size": "original",
+    "strategy": "E_grounding",
+    "coords": null,
+    "elapsed": 2.2688357830047607,
+    "content_len": 445,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "image_size": "original",
+    "strategy": "F_千分比坐标",
+    "coords": null,
+    "elapsed": 1.7788119316101074,
+    "content_len": 232,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "image_size": "original",
+    "strategy": "G_Qwen_VL_bbox",
+    "coords": null,
+    "elapsed": 2.6963820457458496,
+    "content_len": 437,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "A_极简",
+    "coords": null,
+    "elapsed": 2.770103693008423,
+    "content_len": 460,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "B_JSON格式",
+    "coords": null,
+    "elapsed": 1.645695447921753,
+    "content_len": 432,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "C_英文prompt",
+    "coords": null,
+    "elapsed": 1.825420618057251,
+    "content_len": 479,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "D_分步思考",
+    "coords": [
+      163,
+      413,
+      226,
+      433
+    ],
+    "elapsed": 3.753051996231079,
+    "content_len": 822,
+    "success": true
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "E_grounding",
+    "coords": null,
+    "elapsed": 2.3947267532348633,
+    "content_len": 453,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "F_千分比坐标",
+    "coords": null,
+    "elapsed": 1.8935816287994385,
+    "content_len": 232,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "image_size": "original",
+    "strategy": "G_Qwen_VL_bbox",
+    "coords": [
+      164,
+      406,
+      240,
+      434
+    ],
+    "elapsed": 2.3848297595977783,
+    "content_len": 20,
+    "success": true
+  }
+]

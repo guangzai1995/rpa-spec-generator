@@ -1,0 +1,462 @@
+[
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "strategy": "G1_ref_box",
+    "raw_coords": [
+      225,
+      364,
+      234,
+      382
+    ],
+    "pixel_coords": [
+      216,
+      198,
+      224,
+      207
+    ],
+    "format": "array",
+    "elapsed": 12.149431467056274,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "strategy": "G1_ref_box",
+    "raw_coords": [
+      161,
+      396,
+      247,
+      426
+    ],
+    "pixel_coords": [
+      154,
+      215,
+      237,
+      231
+    ],
+    "format": "array",
+    "elapsed": 3.0222761631011963,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "综合查询",
+    "strategy": "G1_ref_box",
+    "raw_coords": [
+      161,
+      438,
+      247,
+      469
+    ],
+    "pixel_coords": [
+      154,
+      238,
+      237,
+      255
+    ],
+    "format": "array",
+    "elapsed": 2.8178045749664307,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "我的工作台",
+    "strategy": "G1_ref_box",
+    "raw_coords": [
+      161,
+      196,
+      247,
+      230
+    ],
+    "pixel_coords": [
+      154,
+      106,
+      237,
+      125
+    ],
+    "format": "array",
+    "elapsed": 2.505934715270996,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "立项管理",
+    "strategy": "G1_ref_box",
+    "raw_coords": [
+      161,
+      278,
+      247,
+      312
+    ],
+    "pixel_coords": [
+      154,
+      151,
+      237,
+      169
+    ],
+    "format": "array",
+    "elapsed": 2.773541212081909,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 3.43501877784729,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 3.7604222297668457,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "综合查询",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 3.5796473026275635,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "我的工作台",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 3.1307284832000732,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "立项管理",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.940934419631958,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "收支管理",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.706296920776367,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "回款管理",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": [
+      161,
+      394,
+      247,
+      424
+    ],
+    "pixel_coords": [
+      154,
+      214,
+      237,
+      230
+    ],
+    "format": "array",
+    "elapsed": 2.2124428749084473,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "综合查询",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.3306996822357178,
+    "success": false
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "我的工作台",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": [
+      177,
+      206,
+      229,
+      229
+    ],
+    "pixel_coords": [
+      169,
+      112,
+      219,
+      124
+    ],
+    "format": "array",
+    "elapsed": 2.034467935562134,
+    "success": true
+  },
+  {
+    "frame": "frame_03_54.jpg",
+    "target": "立项管理",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": [
+      160,
+      270,
+      247,
+      310
+    ],
+    "pixel_coords": [
+      153,
+      146,
+      237,
+      168
+    ],
+    "format": "array",
+    "elapsed": 2.3610620498657227,
+    "success": true
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "strategy": "G1_ref_box",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.4680416584014893,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "strategy": "G1_ref_box",
+    "raw_coords": [
+      164,
+      406,
+      240,
+      434
+    ],
+    "pixel_coords": [
+      157,
+      220,
+      230,
+      236
+    ],
+    "format": "array",
+    "elapsed": 2.3240249156951904,
+    "success": true
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "合同编号",
+    "strategy": "G1_ref_box",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.7028074264526367,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "项目名称",
+    "strategy": "G1_ref_box",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.5112574100494385,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "strategy": "G2_ref_only",
+    "raw_coords": [
+      530,
+      650,
+      563,
+      678
+    ],
+    "pixel_coords": [
+      508,
+      353,
+      540,
+      368
+    ],
+    "format": "array",
+    "elapsed": 1.7319819927215576,
+    "success": true
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.4554669857025146,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "合同编号",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.016106128692627,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "项目名称",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 1.9654240608215332,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "打印",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": [
+      530,
+      650,
+      563,
+      678
+    ],
+    "pixel_coords": [
+      508,
+      353,
+      540,
+      368
+    ],
+    "format": "array",
+    "elapsed": 1.518446445465088,
+    "success": true
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "回款管理",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.352071762084961,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "合同编号",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.2713520526885986,
+    "success": false
+  },
+  {
+    "frame": "frame_06_18.jpg",
+    "target": "项目名称",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 1.9455041885375977,
+    "success": false
+  },
+  {
+    "frame": "frame_00_54.jpg",
+    "target": "搜索",
+    "strategy": "G1_ref_box",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 3.2493910789489746,
+    "success": false
+  },
+  {
+    "frame": "frame_00_54.jpg",
+    "target": "登录",
+    "strategy": "G1_ref_box",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.6572999954223633,
+    "success": false
+  },
+  {
+    "frame": "frame_00_54.jpg",
+    "target": "搜索",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.6384501457214355,
+    "success": false
+  },
+  {
+    "frame": "frame_00_54.jpg",
+    "target": "登录",
+    "strategy": "G2_ref_only",
+    "raw_coords": null,
+    "pixel_coords": null,
+    "format": null,
+    "elapsed": 2.763751745223999,
+    "success": false
+  },
+  {
+    "frame": "frame_00_54.jpg",
+    "target": "搜索",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": [
+      775,
+      163,
+      796,
+      192
+    ],
+    "pixel_coords": [
+      744,
+      88,
+      764,
+      104
+    ],
+    "format": "array",
+    "elapsed": 2.699708938598633,
+    "success": true
+  },
+  {
+    "frame": "frame_00_54.jpg",
+    "target": "登录",
+    "strategy": "G3_nothink_ref",
+    "raw_coords": [
+      780,
+      161,
+      796,
+      185
+    ],
+    "pixel_coords": [
+      748,
+      87,
+      764,
+      100
+    ],
+    "format": "array",
+    "elapsed": 3.1857211589813232,
+    "success": true
+  }
+]

@@ -22,9 +22,11 @@ numpy==2.2.4
 # Document generation
 docxtpl==0.19.0
 python-docx==1.2.0
+matplotlib==3.9.2
 
 # Utils
 pydantic==2.11.2
+pydantic-settings==2.8.1
 requests==2.32.3
 PyYAML==6.0.2
 aiofiles==24.1.0

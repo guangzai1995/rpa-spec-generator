@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
+import ResultPage from './pages/ResultPage';
 
 function Header() {
   const location = useLocation();
@@ -9,7 +10,10 @@ function Header() {
     <header className="header">
       <div className="header-brand">
         <div className="header-logo">R</div>
-        <h1>RPA 需求规格说明书生成</h1>
+        <h1>
+          RPA 需求规格说明书生成系统
+          <span className="header-sub">AI · MVP</span>
+        </h1>
       </div>
       <nav>
         <Link to="/" className={location.pathname === '/' ? 'active' : ''}>
@@ -31,6 +35,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/result/:reqId" element={<ResultPage />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   createRequirement,
   uploadVideo,
@@ -32,18 +33,36 @@ const PROCESSING_STATUSES = [
 ];
 
 export default function HomePage() {
+  const navigate = useNavigate();
   // 表单状态
   const [form, setForm] = useState<RequirementForm>({
     req_type: '网页自动化',
     title: '',
     req_dept: '',
     req_owner: '',
+    contact_info: '',
+    priority: '中',
     target_url: '',
     login_required: false,
     exec_frequency: '每日',
     input_source: '',
     output_sink: '',
     exception_policy: ['企微群通知'],
+    req_background: '',
+    current_pain: '',
+    current_role: '',
+    single_duration: '',
+    business_volume: '',
+    involved_systems: '',
+    execution_time: '',
+    rpa_schedule_time: '',
+    browser: 'Chrome 120+',
+    network_env: '',
+    account_type: '',
+    current_headcount: '',
+    current_hours: '',
+    expected_benefit: '',
+    expected_saving: '',
   });
 
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -52,13 +71,23 @@ export default function HomePage() {
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<number>(1); // 1=填表 2=上传 3=处理中 4=完成
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   // 历史列表
   const [requirements, setRequirements] = useState<RequirementItem[]>([]);
   const [showHistory, setShowHistory] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const pollRef = useRef<NodeJS.Timeout | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const primaryFieldCount = [
+    form.req_type,
+    form.title,
+    form.req_owner,
+    form.req_dept,
+    form.exec_frequency,
+  ].filter(Boolean).length;
+  const draftTitle = form.title?.trim() || '未命名需求';
 
   // 加载历史
   const loadHistory = useCallback(async () => {
@@ -221,125 +250,292 @@ export default function HomePage() {
           <div className="form-upload-grid">
             {/* 左：表单 */}
             <div className="card">
-              <div className="card-title">需求基础信息</div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>业务类型 <span className="required">*</span></label>
-                  <select
-                    className="form-control"
-                    value={form.req_type}
-                    onChange={e => setForm({...form, req_type: e.target.value})}
-                  >
-                    <option value="数据录入">数据录入</option>
-                    <option value="文件处理">文件处理</option>
-                    <option value="网页自动化">网页自动化</option>
-                    <option value="系统对接">系统对接</option>
-                    <option value="混合型">混合型</option>
-                  </select>
+              <div className="form-header">
+                <div>
+                  <div className="card-title">需求基础信息</div>
+                  <p className="form-header-desc">首屏只保留最常用字段，其他补充信息可在高级选项中按需完善。</p>
                 </div>
-                <div className="form-group">
-                  <label>需求标题</label>
-                  <input
-                    className="form-control"
-                    placeholder="例：每日运营日报自动推送"
-                    value={form.title || ''}
-                    onChange={e => setForm({...form, title: e.target.value})}
-                  />
+                <div className="form-progress-badge">已填写 {primaryFieldCount}/6</div>
+              </div>
+
+              <div className="core-form-panel">
+                <div className="core-form-grid">
+                  <div className="form-group form-group-span-2">
+                    <label>需求标题</label>
+                    <input
+                      className="form-control"
+                      placeholder="例：月度经营报表自动下载RPA"
+                      value={form.title || ''}
+                      onChange={e => setForm({...form, title: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>业务类型 <span className="required">*</span></label>
+                    <select
+                      className="form-control"
+                      value={form.req_type}
+                      onChange={e => setForm({...form, req_type: e.target.value})}
+                    >
+                      <option value="报表类">报表类</option>
+                      <option value="数据抓取类">数据抓取类</option>
+                      <option value="工单办理类">工单办理类</option>
+                      <option value="数据录入">数据录入</option>
+                      <option value="文件处理">文件处理</option>
+                      <option value="网页自动化">网页自动化</option>
+                      <option value="系统对接">系统对接</option>
+                      <option value="混合型">混合型</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>执行频率</label>
+                    <select
+                      className="form-control"
+                      value={form.exec_frequency || ''}
+                      onChange={e => setForm({...form, exec_frequency: e.target.value})}
+                    >
+                      <option value="每日">每日</option>
+                      <option value="每周">每周</option>
+                      <option value="每月">每月</option>
+                      <option value="按需">按需</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>需求提出人</label>
+                    <input
+                      className="form-control"
+                      placeholder="姓名"
+                      value={form.req_owner || ''}
+                      onChange={e => setForm({...form, req_owner: e.target.value})}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>需求部门</label>
+                    <select
+                      className="form-control"
+                      value={form.req_dept || ''}
+                      onChange={e => setForm({...form, req_dept: e.target.value})}
+                    >
+                      <option value="">请选择</option>
+                      <option value="运营部">运营部</option>
+                      <option value="客户服务部">客户服务部</option>
+                      <option value="市场经营部">市场经营部</option>
+                      <option value="计费支撑部">计费支撑部</option>
+                      <option value="运维部">运维部</option>
+                      <option value="其他">其他</option>
+                    </select>
+                  </div>
+
+                </div>
+
+                <div className="core-form-meta">
+                  <div className="form-group inline-select">
+                    <label>优先级</label>
+                    <select
+                      className="form-control"
+                      value={form.priority || '中'}
+                      onChange={e => setForm({...form, priority: e.target.value})}
+                    >
+                      <option value="高">高</option>
+                      <option value="中">中</option>
+                      <option value="低">低</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>需求部门</label>
-                  <select
-                    className="form-control"
-                    value={form.req_dept || ''}
-                    onChange={e => setForm({...form, req_dept: e.target.value})}
-                  >
-                    <option value="">请选择</option>
-                    <option value="运营部">运营部</option>
-                    <option value="客户服务部">客户服务部</option>
-                    <option value="市场经营部">市场经营部</option>
-                    <option value="计费支撑部">计费支撑部</option>
-                    <option value="运维部">运维部</option>
-                    <option value="其他">其他</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>需求提出人</label>
-                  <input
-                    className="form-control"
-                    placeholder="姓名"
-                    value={form.req_owner || ''}
-                    onChange={e => setForm({...form, req_owner: e.target.value})}
-                  />
-                </div>
+              {/* 高级选项折叠 */}
+              <div className="advanced-toggle">
+                <button
+                  type="button"
+                  className="btn btn-sm"
+                  onClick={() => setShowAdvanced(!showAdvanced)}
+                >
+                  {showAdvanced ? '收起补充信息 ▲' : '展开补充信息 ▼'}
+                </button>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>目标系统 URL</label>
-                  <input
-                    className="form-control"
-                    placeholder="https://..."
-                    value={form.target_url || ''}
-                    onChange={e => setForm({...form, target_url: e.target.value})}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>执行频率</label>
-                  <select
-                    className="form-control"
-                    value={form.exec_frequency || ''}
-                    onChange={e => setForm({...form, exec_frequency: e.target.value})}
-                  >
-                    <option value="每日">每日</option>
-                    <option value="每周">每周</option>
-                    <option value="每月">每月</option>
-                    <option value="按需">按需</option>
-                  </select>
-                </div>
-              </div>
+              {showAdvanced && (
+                <div className="advanced-panel">
+                  <div className="advanced-hero">
+                    <div>
+                      <div className="advanced-hero-title">补充信息</div>
+                      <p className="advanced-hero-desc">这些字段会进入最终文档，但不是完成提交的必填项。</p>
+                    </div>
+                  </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>输入数据来源</label>
-                  <input
-                    className="form-control"
-                    placeholder="例：目标系统筛选条件"
-                    value={form.input_source || ''}
-                    onChange={e => setForm({...form, input_source: e.target.value})}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>输出结果去向</label>
-                  <input
-                    className="form-control"
-                    placeholder="例：导出 Excel / 企微推送"
-                    value={form.output_sink || ''}
-                    onChange={e => setForm({...form, output_sink: e.target.value})}
-                  />
-                </div>
-              </div>
+                  <div className="advanced-section">
+                    <div className="section-subtitle">背景与交付</div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>联系方式</label>
+                        <input
+                          className="form-control"
+                          placeholder="手机号/企微"
+                          value={form.contact_info || ''}
+                          onChange={e => setForm({...form, contact_info: e.target.value})}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>需求背景</label>
+                        <input
+                          className="form-control"
+                          placeholder="为什么提出该需求"
+                          value={form.req_background || ''}
+                          onChange={e => setForm({...form, req_background: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>当前痛点</label>
+                        <input
+                          className="form-control"
+                          placeholder="当前主要问题"
+                          value={form.current_pain || ''}
+                          onChange={e => setForm({...form, current_pain: e.target.value})}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>目标系统 URL</label>
+                        <input
+                          className="form-control"
+                          placeholder="https://..."
+                          value={form.target_url || ''}
+                          onChange={e => setForm({...form, target_url: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>输出结果去向</label>
+                        <input
+                          className="form-control"
+                          placeholder="例：导出 Excel / 企微推送"
+                          value={form.output_sink || ''}
+                          onChange={e => setForm({...form, output_sink: e.target.value})}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>输入数据来源</label>
+                        <input
+                          className="form-control"
+                          placeholder="例：目标系统筛选条件"
+                          value={form.input_source || ''}
+                          onChange={e => setForm({...form, input_source: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                  </div>
 
-              <div className="form-group">
-                <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    checked={form.login_required || false}
-                    onChange={e => setForm({...form, login_required: e.target.checked})}
-                    style={{ width: 16, height: 16, accentColor: '#3c77fb' }}
-                  />
-                  需要登录
-                </label>
-              </div>
+                  <div className="advanced-section">
+                    <div className="section-subtitle">流程信息</div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>当前执行角色</label>
+                        <input className="form-control" placeholder="目前由谁执行" value={form.current_role || ''} onChange={e => setForm({...form, current_role: e.target.value})} />
+                      </div>
+                      <div className="form-group">
+                        <label>单次耗时</label>
+                        <input className="form-control" placeholder="例：3小时" value={form.single_duration || ''} onChange={e => setForm({...form, single_duration: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>业务量</label>
+                        <input className="form-control" placeholder="例：约15张报表，3000行数据" value={form.business_volume || ''} onChange={e => setForm({...form, business_volume: e.target.value})} />
+                      </div>
+                      <div className="form-group">
+                        <label>涉及系统</label>
+                        <input className="form-control" placeholder="例：CRM系统、Excel" value={form.involved_systems || ''} onChange={e => setForm({...form, involved_systems: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>日常执行时段</label>
+                        <input className="form-control" placeholder="例：每月5号上午" value={form.execution_time || ''} onChange={e => setForm({...form, execution_time: e.target.value})} />
+                      </div>
+                      <div className="form-group">
+                        <label>建议RPA执行时间</label>
+                        <input className="form-control" placeholder="例：每月6号凌晨2点" value={form.rpa_schedule_time || ''} onChange={e => setForm({...form, rpa_schedule_time: e.target.value})} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="advanced-section">
+                    <div className="section-subtitle">运行环境与账号</div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>操作浏览器</label>
+                        <input className="form-control" placeholder="Chrome 120+" value={form.browser || ''} onChange={e => setForm({...form, browser: e.target.value})} />
+                      </div>
+                      <div className="form-group">
+                        <label>网络环境</label>
+                        <input className="form-control" placeholder="内网/外网/VPN" value={form.network_env || ''} onChange={e => setForm({...form, network_env: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>账号类型</label>
+                        <select className="form-control" value={form.account_type || ''} onChange={e => setForm({...form, account_type: e.target.value})}>
+                          <option value="">请选择</option>
+                          <option value="个人账号">个人账号</option>
+                          <option value="共享账号">共享账号</option>
+                        </select>
+                      </div>
+                      <div className="form-group" style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: 4 }}>
+                        <label className="checkbox-label">
+                          <input type="checkbox" checked={form.multi_user || false} onChange={e => setForm({...form, multi_user: e.target.checked})} />
+                          多人共用（可能顶号）
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="advanced-section">
+                    <div className="section-subtitle">收益与价值</div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>当前投入人力</label>
+                        <input className="form-control" placeholder="例：2人" value={form.current_headcount || ''} onChange={e => setForm({...form, current_headcount: e.target.value})} />
+                      </div>
+                      <div className="form-group">
+                        <label>当前工时</label>
+                        <input className="form-control" placeholder="例：每月6小时" value={form.current_hours || ''} onChange={e => setForm({...form, current_hours: e.target.value})} />
+                      </div>
+                    </div>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>预期收益</label>
+                        <input className="form-control" placeholder="例：节省人工、减少差错" value={form.expected_benefit || ''} onChange={e => setForm({...form, expected_benefit: e.target.value})} />
+                      </div>
+                      <div className="form-group">
+                        <label>预期节省工时</label>
+                        <input className="form-control" placeholder="例：每月节省4小时" value={form.expected_saving || ''} onChange={e => setForm({...form, expected_saving: e.target.value})} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* 右：上传 + 提交 */}
-            <div>
-              <div className="card">
-                <div className="card-title">上传操作录屏 <span className="required">*</span></div>
+            <div className="submit-column">
+              <div className="card submit-card">
+                <div className="card-title">提交面板 <span className="required">*</span></div>
+
+                <div className="submit-summary">
+                  <div className="summary-label">当前需求</div>
+                  <div className="summary-title">{draftTitle}</div>
+                  <div className="summary-tags">
+                    <span className="summary-tag">{form.req_type}</span>
+                    <span className="summary-tag">{form.exec_frequency || '未设置频率'}</span>
+                    <span className="summary-tag muted">{form.req_owner || '未填写提出人'}</span>
+                  </div>
+                </div>
 
                 <div
                   className={`upload-area ${videoFile ? 'has-file' : ''}`}
@@ -358,6 +554,7 @@ export default function HomePage() {
                     <div className="upload-hint">建议时长 ≤ 15 分钟</div>
                   )}
                 </div>
+
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -368,16 +565,31 @@ export default function HomePage() {
                     if (f) setVideoFile(f);
                   }}
                 />
-              </div>
 
-              <button
-                className="btn btn-primary btn-lg"
-                onClick={handleSubmit}
-                disabled={loading || !videoFile}
-                style={{width: '100%', marginTop: 4}}
-              >
-                {loading ? '提交中...' : '提交并生成说明书'}
-              </button>
+                <div className="submit-tips">
+                  <div className="submit-tip-item">
+                    <span className="submit-tip-dot"></span>
+                    AI 会自动分析录屏并生成结构化需求文档
+                  </div>
+                  <div className="submit-tip-item">
+                    <span className="submit-tip-dot"></span>
+                    高级选项可选填，不影响正常提交
+                  </div>
+                  <div className="submit-tip-item">
+                    <span className="submit-tip-dot"></span>
+                    当前表单填写越完整，文档越接近最终版本
+                  </div>
+                </div>
+
+                <button
+                  className="btn btn-primary btn-lg"
+                  onClick={handleSubmit}
+                  disabled={loading || !videoFile}
+                  style={{width: '100%', marginTop: 4}}
+                >
+                  {loading ? '提交中...' : '提交并生成说明书'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -393,8 +605,9 @@ export default function HomePage() {
                 {STATUS_LABELS[taskStatus] || '处理中...'}
               </div>
               <div className="progress-sub">
-                请耐心等待，10 分钟录屏预计需要 3~5 分钟处理
+                AI 正在解析录屏内容，10 分钟录屏预计需要 3~5 分钟
               </div>
+              <div className="progress-bar"></div>
             </div>
           </div>
         </div>
@@ -407,7 +620,7 @@ export default function HomePage() {
             <div className="result-card">
               <div className="result-icon">🎉</div>
               <div className="result-title">需求规格说明书已生成</div>
-              <div className="result-desc">文档已就绪，点击下方按钮下载</div>
+              <div className="result-desc">文档已就绪，可下载或在线预览</div>
               <div className="result-actions">
                 <a
                   href={getSpecDownloadUrl(currentReqId)}
@@ -416,6 +629,12 @@ export default function HomePage() {
                 >
                   下载说明书
                 </a>
+                <button
+                  className="btn btn-lg"
+                  onClick={() => navigate(`/result/${currentReqId}`)}
+                >
+                  在线预览
+                </button>
                 <button className="btn btn-lg" onClick={handleReset}>
                   创建新需求
                 </button>
@@ -465,13 +684,21 @@ export default function HomePage() {
                     <td>
                       <div className="btn-group">
                         {item.status === 'success' && (
-                          <a
-                            href={getSpecDownloadUrl(item.id)}
-                            className="btn btn-sm btn-success"
-                            download
-                          >
-                            下载
-                          </a>
+                          <>
+                            <a
+                              href={getSpecDownloadUrl(item.id)}
+                              className="btn btn-sm btn-success"
+                              download
+                            >
+                              下载
+                            </a>
+                            <button
+                              className="btn btn-sm"
+                              onClick={() => navigate(`/result/${item.id}`)}
+                            >
+                              预览
+                            </button>
+                          </>
                         )}
                         {PROCESSING_STATUSES.includes(item.status) && (
                           <button

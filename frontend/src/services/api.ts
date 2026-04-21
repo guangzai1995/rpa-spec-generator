@@ -10,6 +10,8 @@ export interface RequirementForm {
   title?: string;
   req_dept?: string;
   req_owner?: string;
+  contact_info?: string;
+  priority?: string;
   target_url?: string;
   login_required?: boolean;
   exec_frequency?: string;
@@ -17,6 +19,36 @@ export interface RequirementForm {
   output_sink?: string;
   exception_policy?: string[];
   glossary?: string[];
+  // 背景与痛点
+  req_background?: string;
+  current_pain?: string;
+  // 流程信息
+  current_role?: string;
+  single_duration?: string;
+  business_volume?: string;
+  involved_systems?: string;
+  execution_time?: string;
+  rpa_schedule_time?: string;
+  // 运行环境
+  pc_config?: string;
+  browser?: string;
+  network_env?: string;
+  // 账号信息
+  account_type?: string;
+  multi_user?: boolean;
+  permission_limit?: string;
+  // 前置条件
+  data_prerequisite?: string;
+  system_prerequisite?: string;
+  other_dependency?: string;
+  sensitive_data?: boolean;
+  compliance_req?: string;
+  // 收益
+  current_headcount?: string;
+  current_hours?: string;
+  expected_benefit?: string;
+  expected_saving?: string;
+  quality_improvement?: string;
 }
 
 export interface RequirementItem {
@@ -83,9 +115,20 @@ export const getSpecDownloadUrl = (reqId: string) =>
 export const getTimeline = (reqId: string) =>
   api.get(`/requirements/${reqId}/timeline`);
 
+// 更新时间线步骤
+export const updateTimelineStep = (reqId: string, stepNo: number, data: {
+  action?: string;
+  target_text?: string;
+  context_text?: string;
+}) => api.put(`/requirements/${reqId}/timeline/${stepNo}`, data);
+
 // 获取结构化结果
 export const getExtraction = (reqId: string) =>
   api.get(`/requirements/${reqId}/extraction`);
+
+// 获取说明书预览数据
+export const getSpecPreview = (reqId: string) =>
+  api.get(`/requirements/${reqId}/preview`);
 
 // Provider 管理
 export const listProviders = () =>
