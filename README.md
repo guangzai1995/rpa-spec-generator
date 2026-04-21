@@ -63,6 +63,19 @@ docker run --gpus all -p 80:80 -p 8480:8480 \
 	rpa-spec-generator
 ```
 
+### 启动脚本
+
+```bash
+# 默认使用宿主机 0 号 GPU，并正确传入 backend/.env
+bash run-container.sh
+
+# 指定宿主机 1 号 GPU
+bash run-container.sh --gpu-index 1
+
+# CPU 模式启动
+bash run-container.sh --cpu
+```
+
 说明：
 
 - Docker 镜像默认基于 CUDA runtime 基础镜像构建，不再通过 pip 单独下载超大的 NVIDIA wheel。
@@ -70,6 +83,7 @@ docker run --gpus all -p 80:80 -p 8480:8480 \
 - CPU 环境可以直接运行同一份镜像；如需强制 CPU 模式，启动时添加 -e WHISPER_DEVICE=cpu。
 - 默认会将 backend/models/pengzhendong 下的 Whisper 模型打进镜像，减少首次启动时的额外准备步骤。
 - 上传文件、转写结果等运行时数据不会被打进构建上下文。
+- run-container.sh 会同时使用 --env-file 和只读挂载，将 backend/.env 传入容器，并在单卡模式下自动把容器内 WHISPER_DEVICE_INDEX 设为 0。
 
 ## 使用流程
 
