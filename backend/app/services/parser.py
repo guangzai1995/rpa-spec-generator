@@ -251,6 +251,7 @@ def transcribe_video(
     glossary: Optional[List[str]] = None,
     model_size: str = "large-v3",
     device: str = "cuda",
+    device_index: int = 0,
     model_dir: str = None,
 ) -> TranscriptResult:
     """ASR 转录"""
@@ -287,7 +288,12 @@ def transcribe_video(
             logger.warning(f"Whisper 设备 {device} 不可用，回退到 {resolved_device}")
 
         compute_type = "float16" if resolved_device == "cuda" else "int8"
-        model = WhisperModel(model_path, device=resolved_device, compute_type=compute_type)
+        model = WhisperModel(
+            model_path,
+            device=resolved_device,
+            device_index=device_index if resolved_device == "cuda" else 0,
+            compute_type=compute_type,
+        )
 
         # 构建 initial_prompt（注入业务术语）
         initial_prompt = None

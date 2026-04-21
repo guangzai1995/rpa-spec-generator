@@ -64,6 +64,8 @@ LOG_DIR="$SCRIPT_DIR/logs"
 BACKEND_PORT="${BACKEND_PORT:-8480}"
 FRONTEND_PORT="${FRONTEND_PORT:-3000}"
 DOCKER_APP_PORT="${APP_PORT:-80}"
+# Whisper GPU 卡号（0=第一张卡，多卡时可指定）
+WHISPER_DEVICE_INDEX="${WHISPER_DEVICE_INDEX:-0}"
 BACKEND_PID_FILE="$SCRIPT_DIR/.backend.pid"
 FRONTEND_PID_FILE="$SCRIPT_DIR/.frontend.pid"
 COMPOSE_PROJECT="rpa-spec"
@@ -345,9 +347,10 @@ preflight_check() {
 
   # GPU 检测（非阻断）
   if command -v nvidia-smi >/dev/null 2>&1; then
-    local gpu_info
-    gpu_info=$(nvidia-smi --query-gpu=name,memory.total --format=csv,noheader 2>/dev/null | head -1)
-    ok "GPU 检测: $gpu_info"
+    info "检测到 GPU:"
+    nvidia-smi --query-gpu=index,name,memory.total --format=csv,noheader 2>/dev/null \
+      | while IFS= read -r line; do echo "       GPU $line"; done
+    warn "当前 WHISPER_DEVICE_INDEX=${WHISPER_DEVICE_INDEX}，可通过 WHISPER_DEVICE_INDEX=<编号> 指定使用的卡"
   else
     warn "未检测到 GPU (nvidia-smi)，ASR 将使用 CPU 模式"
   fi
@@ -388,6 +391,7 @@ VISION_MODEL=Qwen3_5-35B-A3B-FP8
 # ASR 配置（默认尝试 cuda，不可用时自动回退 cpu）
 WHISPER_MODEL_SIZE=large-v3
 WHISPER_DEVICE=cuda
+WHISPER_DEVICE_INDEX=0
 WHISPER_MODEL_DIR=models/pengzhendong/faster-whisper-large-v3
 
 # 文件存储
@@ -494,6 +498,10 @@ start_backend() {
 
   # CUDA 库路径
   setup_ld_library_path
+
+  # 导出 Whisper 卡号
+  export WHISPER_DEVICE_INDEX
+  info "Whisper GPU 卡号: WHISPER_DEVICE_INDEX=${WHISPER_DEVICE_INDEX}"
 
   # 确保目录
   cd "$BACKEND_DIR"

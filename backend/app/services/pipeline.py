@@ -123,6 +123,7 @@ def run_pipeline(requirement_id: str):
 
         whisper_model = os.getenv("WHISPER_MODEL_SIZE", "large-v3-turbo")
         whisper_device = os.getenv("WHISPER_DEVICE", "cuda")
+        whisper_device_index = int(os.getenv("WHISPER_DEVICE_INDEX", "0"))
         whisper_model_dir = os.getenv("WHISPER_MODEL_DIR", None)
 
         duration = video_info.get("duration", 300)
@@ -137,6 +138,7 @@ def run_pipeline(requirement_id: str):
                 glossary=glossary,
                 model_size=whisper_model,
                 device=whisper_device,
+                device_index=whisper_device_index,
                 model_dir=whisper_model_dir,
             )
             frames_future = pool.submit(
