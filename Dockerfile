@@ -85,6 +85,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgomp1 \
     python3 \
     python3-pip \
+    && rm -f /etc/nginx/sites-enabled/default \
     && rm -rf /var/lib/apt/lists/*
 
 # ---------- 从 python-deps stage 复制虚拟环境 ----------
