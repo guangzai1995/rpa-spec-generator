@@ -65,8 +65,9 @@ docker run --gpus all -p 80:80 -p 8480:8480 \
 
 说明：
 
-- Docker 镜像会额外安装 faster-whisper 所需的 CUDA 12 cuBLAS 与 cuDNN 9 Python 运行库。
+- Docker 镜像默认基于 CUDA runtime 基础镜像构建，不再通过 pip 单独下载超大的 NVIDIA wheel。
 - 如果容器启动时没有可用 GPU，后端会自动回退到 CPU 模式，而不是直接崩溃。
+- CPU 环境可以直接运行同一份镜像；如需强制 CPU 模式，启动时添加 -e WHISPER_DEVICE=cpu。
 - 模型目录、上传文件、转写结果不会被打进构建上下文；请在运行时通过挂载卷或容器内下载模型。
 
 ## 使用流程

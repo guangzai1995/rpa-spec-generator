@@ -3,10 +3,11 @@
 # build.sh — RPA 需求规格说明书生成系统 Docker 镜像构建脚本
 #
 # 用法:
-#   bash build.sh                    # 默认构建 (国内源)
+#   bash build.sh                    # 默认构建 CUDA 兼容镜像 (国内源)
 #   bash build.sh --tag v1.2.3       # 指定版本标签
 #   bash build.sh --no-cache         # 禁用 Docker 层缓存
 #   bash build.sh --no-mirror        # 关闭国内镜像源（境外网络）
+#   bash build.sh --cuda-image <img> # 自定义 CUDA 基础镜像
 #   bash build.sh --push             # 构建后推送到镜像仓库
 #   bash build.sh --registry myrepo  # 自定义镜像仓库前缀
 #   bash build.sh --target <stage>   # 只构建到指定 stage
@@ -40,6 +41,7 @@ DOCKERFILE="$SCRIPT_DIR/Dockerfile"
 PIP_INDEX="https://pypi.tuna.tsinghua.edu.cn/simple"
 PIP_HOST="pypi.tuna.tsinghua.edu.cn"
 NPM_REGISTRY="https://registry.npmmirror.com"
+CUDA_BASE_IMAGE="nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04"
 
 # ---------- 参数解析 ----------
 while [[ $# -gt 0 ]]; do
@@ -52,6 +54,8 @@ while [[ $# -gt 0 ]]; do
       NO_CACHE=true; shift ;;
     --no-mirror)
       USE_MIRROR=false; shift ;;
+    --cuda-image)
+      CUDA_BASE_IMAGE="$2"; shift 2 ;;
     --push)
       DO_PUSH=true; shift ;;
     --target)
@@ -79,6 +83,8 @@ command -v docker >/dev/null 2>&1 || fail "未找到 docker，请先安装"
 # ---------- 构建参数组装 ----------
 BUILD_ARGS=()
 
+BUILD_ARGS+=(--build-arg "CUDA_BASE_IMAGE=$CUDA_BASE_IMAGE")
+
 # 国内源开关
 if [[ "$USE_MIRROR" == true ]]; then
   BUILD_ARGS+=(
@@ -101,6 +107,7 @@ fi
 step "开始构建镜像"
 info "镜像名称: $FULL_IMAGE"
 info "Dockerfile: $DOCKERFILE"
+info "CUDA 基础镜像: $CUDA_BASE_IMAGE"
 echo ""
 
 # ---------- 打印 Git 信息（可选，若无 git 则跳过） ----------

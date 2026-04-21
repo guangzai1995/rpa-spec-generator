@@ -1,29 +1,38 @@
-FROM python:3.11-slim
+ARG CUDA_BASE_IMAGE=nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
+FROM ${CUDA_BASE_IMAGE}
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
-    NVIDIA_PYTHON_SITE=/usr/local/lib/python3.11/site-packages
+    DEBIAN_FRONTEND=noninteractive \
+    VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     curl \
     ffmpeg \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 COPY backend/requirements.txt /tmp/requirements.txt
-RUN pip install --upgrade pip && \
-    pip install -r /tmp/requirements.txt && \
-    pip install "nvidia-cublas-cu12>=12,<13" "nvidia-cudnn-cu12>=9,<10"
+RUN python3 -m venv "$VIRTUAL_ENV" && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt
 
 COPY backend/ ./
 
 RUN mkdir -p static/screenshots static/docs uploads note_results templates && \
-    find "$NVIDIA_PYTHON_SITE/nvidia" -name "*.so*" -exec chmod a+rx {} \; 2>/dev/null || true && \
+    find /usr/local/cuda -name "*.so*" -exec chmod a+rx {} \; 2>/dev/null || true && \
     ldconfig 2>/dev/null || true
 
-ENV LD_LIBRARY_PATH="/usr/local/cuda/targets/x86_64-linux/lib:${NVIDIA_PYTHON_SITE}/nvidia/cublas/lib:${NVIDIA_PYTHON_SITE}/nvidia/cudnn/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+ENV LD_LIBRARY_PATH="/usr/local/cuda/targets/x86_64-linux/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
 EXPOSE 8480
 

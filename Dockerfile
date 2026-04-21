@@ -33,59 +33,68 @@ RUN npm run build
 # ----------------------------------------------------------------
 # Stage 2: 后端 Python 依赖构建（利用层缓存）
 # ----------------------------------------------------------------
-FROM python:3.11-slim AS python-deps
+ARG CUDA_BASE_IMAGE=nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
+FROM ${CUDA_BASE_IMAGE} AS python-deps
 
 # 使用清华 PyPI 镜像加速
 ARG PIP_INDEX=https://pypi.tuna.tsinghua.edu.cn/simple
 ARG PIP_HOST=pypi.tuna.tsinghua.edu.cn
 
 ENV PIP_NO_CACHE_DIR=1 \
-    PIP_DEFAULT_TIMEOUT=120
+    PIP_DEFAULT_TIMEOUT=120 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    DEBIAN_FRONTEND=noninteractive \
+    VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     build-essential \
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
 COPY backend/requirements.txt /tmp/requirements.txt
-# 先装主依赖，再装 NVIDIA CUDA Python 包（GPU 可用时提供 cuBLAS/cuDNN）
-# 无 GPU 时这两个包仍可正常安装，运行时 faster-whisper 自动降级 CPU
-RUN pip install --upgrade pip -i $PIP_INDEX --trusted-host $PIP_HOST && \
-    pip install -r /tmp/requirements.txt -i $PIP_INDEX --trusted-host $PIP_HOST && \
-    pip install "nvidia-cublas-cu12>=12,<13" "nvidia-cudnn-cu12>=9,<10" \
-        -i $PIP_INDEX --trusted-host $PIP_HOST
+RUN python3 -m venv "$VIRTUAL_ENV" && \
+    pip install --upgrade pip -i $PIP_INDEX --trusted-host $PIP_HOST && \
+    pip install -r /tmp/requirements.txt -i $PIP_INDEX --trusted-host $PIP_HOST
 
 # ----------------------------------------------------------------
 # Stage 3: 最终运行时镜像
 # ----------------------------------------------------------------
-FROM python:3.11-slim AS runtime
+FROM ${CUDA_BASE_IMAGE} AS runtime
 
 # ---------- Python 运行时环境变量 ----------
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    DEBIAN_FRONTEND=noninteractive \
+    VIRTUAL_ENV=/opt/venv \
+    PATH=/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # ---------- 系统依赖（最小化） ----------
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     curl \
     ffmpeg \
     nginx \
     libgomp1 \
+    python3 \
+    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# ---------- 从 python-deps stage 复制已安装的包 ----------
-COPY --from=python-deps /usr/local/lib/python3.11/site-packages \
-                        /usr/local/lib/python3.11/site-packages
-COPY --from=python-deps /usr/local/bin \
-                        /usr/local/bin
+# ---------- 从 python-deps stage 复制虚拟环境 ----------
+COPY --from=python-deps /opt/venv /opt/venv
 
-# ---------- CUDA so 文件权限修复（无 NVIDIA 目录时静默跳过） ----------
-RUN SITE=/usr/local/lib/python3.11/site-packages && \
-    find "$SITE/nvidia" -name "*.so*" -exec chmod a+rx {} \; 2>/dev/null || true && \
+# ---------- CUDA so 文件权限修复 ----------
+RUN find /usr/local/cuda -name "*.so*" -exec chmod a+rx {} \; 2>/dev/null || true && \
     ldconfig 2>/dev/null || true
 
-# ---------- CUDA 库路径（GPU 可用时生效；CPU 环境下路径不存在，无害） ----------
-ENV NVIDIA_PYTHON_SITE=/usr/local/lib/python3.11/site-packages
-ENV LD_LIBRARY_PATH="/usr/local/cuda/targets/x86_64-linux/lib:${NVIDIA_PYTHON_SITE}/nvidia/cublas/lib:${NVIDIA_PYTHON_SITE}/nvidia/cudnn/lib"
+# ---------- CUDA 库路径（GPU 可用时生效；CPU 环境下无 GPU 也可正常启动） ----------
+ENV LD_LIBRARY_PATH="/usr/local/cuda/targets/x86_64-linux/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
 # ---------- NVIDIA 容器运行时声明（docker run --gpus all 时自动注入驱动） ----------
 ENV NVIDIA_VISIBLE_DEVICES=all
