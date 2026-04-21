@@ -218,25 +218,27 @@ export default function HomePage() {
       </div>
 
       {/* 步骤指示器 */}
-      <div className="steps">
-        <div className={`step-item ${step >= 1 ? (step > 1 ? 'done' : 'active') : ''}`}>
-          <span className="step-num">{step > 1 ? '✓' : '1'}</span>
-          <span>填写信息</span>
-        </div>
-        <div className={`step-line ${step > 1 ? 'done' : ''}`}></div>
-        <div className={`step-item ${step >= 2 ? (step > 2 ? 'done' : 'active') : ''}`}>
-          <span className="step-num">{step > 2 ? '✓' : '2'}</span>
-          <span>上传视频</span>
-        </div>
-        <div className={`step-line ${step > 2 ? 'done' : ''}`}></div>
-        <div className={`step-item ${step >= 3 ? (step > 3 ? 'done' : 'active') : ''}`}>
-          <span className="step-num">{step > 3 ? '✓' : '3'}</span>
-          <span>AI 解析</span>
-        </div>
-        <div className={`step-line ${step > 3 ? 'done' : ''}`}></div>
-        <div className={`step-item ${step >= 4 ? 'active' : ''}`}>
-          <span className="step-num">4</span>
-          <span>完成</span>
+      <div className="workflow-shell">
+        <div className="steps">
+          <div className={`step-item ${step >= 1 ? (step > 1 ? 'done' : 'active') : ''}`}>
+            <span className="step-num">{step > 1 ? '✓' : '1'}</span>
+            <span>填写信息</span>
+          </div>
+          <div className={`step-line ${step > 1 ? 'done' : ''}`}></div>
+          <div className={`step-item ${step >= 2 ? (step > 2 ? 'done' : 'active') : ''}`}>
+            <span className="step-num">{step > 2 ? '✓' : '2'}</span>
+            <span>上传视频</span>
+          </div>
+          <div className={`step-line ${step > 2 ? 'done' : ''}`}></div>
+          <div className={`step-item ${step >= 3 ? (step > 3 ? 'done' : 'active') : ''}`}>
+            <span className="step-num">{step > 3 ? '✓' : '3'}</span>
+            <span>AI 解析</span>
+          </div>
+          <div className={`step-line ${step > 3 ? 'done' : ''}`}></div>
+          <div className={`step-item ${step >= 4 ? 'active' : ''}`}>
+            <span className="step-num">4</span>
+            <span>完成</span>
+          </div>
         </div>
       </div>
 
@@ -597,7 +599,7 @@ export default function HomePage() {
 
       {/* Step 3: 处理中 */}
       {step === 3 && (
-        <div className="center-card">
+        <div className="workflow-shell">
           <div className="card">
             <div className="progress-wrapper">
               <div className="progress-spinner"></div>
@@ -645,83 +647,85 @@ export default function HomePage() {
       )}
 
       {/* 历史记录 */}
-      <div className="card" style={{marginTop: 32}}>
-        <div className="card-title history-header">
-          <span>历史记录 {requirements.length > 0 && <span className="history-count">{requirements.length}</span>}</span>
-          <button className="btn btn-sm" onClick={loadHistory}>刷新</button>
-        </div>
-
-        {requirements.length === 0 ? (
-          <div className="empty">
-            <div className="empty-icon">📋</div>
-            <div>暂无记录</div>
+      <div className="workflow-shell">
+        <div className="card" style={{marginTop: 32}}>
+          <div className="card-title history-header">
+            <span>历史记录 {requirements.length > 0 && <span className="history-count">{requirements.length}</span>}</span>
+            <button className="btn btn-sm" onClick={loadHistory}>刷新</button>
           </div>
-        ) : (
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>标题</th>
-                  <th>类型</th>
-                  <th>状态</th>
-                  <th>创建时间</th>
-                  <th>操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                {requirements.map(item => (
-                  <tr key={item.id}>
-                    <td style={{fontWeight: 500}}>{item.title || '未命名需求'}</td>
-                    <td style={{color: '#6b7280'}}>{item.req_type}</td>
-                    <td>
-                      <span className={`status-badge status-${item.status}`}>
-                        {STATUS_LABELS[item.status] || item.status}
-                      </span>
-                    </td>
-                    <td style={{fontSize: 13, color: '#9ca3af'}}>
-                      {item.created_at?.slice(0, 19).replace('T', ' ')}
-                    </td>
-                    <td>
-                      <div className="btn-group">
-                        {item.status === 'success' && (
-                          <>
-                            <a
-                              href={getSpecDownloadUrl(item.id)}
-                              className="btn btn-sm btn-success"
-                              download
-                            >
-                              下载
-                            </a>
+
+          {requirements.length === 0 ? (
+            <div className="empty">
+              <div className="empty-icon">📋</div>
+              <div>暂无记录</div>
+            </div>
+          ) : (
+            <div className="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>标题</th>
+                    <th>类型</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requirements.map(item => (
+                    <tr key={item.id}>
+                      <td style={{fontWeight: 500}}>{item.title || '未命名需求'}</td>
+                      <td style={{color: '#6b7280'}}>{item.req_type}</td>
+                      <td>
+                        <span className={`status-badge status-${item.status}`}>
+                          {STATUS_LABELS[item.status] || item.status}
+                        </span>
+                      </td>
+                      <td style={{fontSize: 13, color: '#9ca3af'}}>
+                        {item.created_at?.slice(0, 19).replace('T', ' ')}
+                      </td>
+                      <td>
+                        <div className="btn-group">
+                          {item.status === 'success' && (
+                            <>
+                              <a
+                                href={getSpecDownloadUrl(item.id)}
+                                className="btn btn-sm btn-success"
+                                download
+                              >
+                                下载
+                              </a>
+                              <button
+                                className="btn btn-sm"
+                                onClick={() => navigate(`/result/${item.id}`)}
+                              >
+                                预览
+                              </button>
+                            </>
+                          )}
+                          {PROCESSING_STATUSES.includes(item.status) && (
                             <button
                               className="btn btn-sm"
-                              onClick={() => navigate(`/result/${item.id}`)}
+                              onClick={() => handleView(item)}
                             >
-                              预览
+                              查看
                             </button>
-                          </>
-                        )}
-                        {PROCESSING_STATUSES.includes(item.status) && (
+                          )}
                           <button
-                            className="btn btn-sm"
-                            onClick={() => handleView(item)}
+                            className="btn btn-sm btn-danger"
+                            onClick={() => handleDelete(item.id)}
                           >
-                            查看
+                            删除
                           </button>
-                        )}
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => handleDelete(item.id)}
-                        >
-                          删除
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
